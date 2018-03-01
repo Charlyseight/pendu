@@ -7,6 +7,7 @@ $triedLetters = '';
 $word = getWord($words,$wordIndex);
 $wordLength = strlen($word);
 $replacementString = getReplacementString($wordLength);
-$serializedLetters=getSerializedLetters($letters);
 $remainingTrials = MAX_TRIALS;
 $wordFound = false;
+
+setcookie('gameData', encode(compact('wordIndex','trials','triedLetters','letters', 'replacementString')));

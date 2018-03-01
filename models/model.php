@@ -31,12 +31,12 @@ function getLettersArray()
             "z" => true];
 }
 
-function getUnserializedLetters($serializedLetters){
-    return unserialize(urldecode($serializedLetters));
-}
-
-function getSerializedLetters($lettersArray){
-    return urlencode(serialize($lettersArray));
+//function getUnserializedLetters($serializedLetters){
+//    return unserialize(urldecode($serializedLetters));
+//}
+//
+//function getSerializedLetters($lettersArray){
+//    return urlencode(serialize($lettersArray));
 }
 
 function getWordsArray()
@@ -56,4 +56,12 @@ function getWord($words,$wordIndex)
 function getReplacementString($wordLength)
 {
     return str_pad('',$wordLength,REPLACEMENT_CHAR);
+}
+
+function encode($toEncode){
+    return base64_encode(json_encode($toEncode));
+}
+
+function decode($toDecode){
+    return json_decode(base64_decode($toDecode),true);
 }

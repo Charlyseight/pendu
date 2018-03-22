@@ -37,20 +37,32 @@ function getLettersArray()
 //
 //function getSerializedLetters($lettersArray){
 //    return urlencode(serialize($lettersArray));
-}
+//}
 
 function getWordsArray()
 {
-    return @file(SOURCE_PATH, FILE_IGNORE_NEW_LINES) ?: false;
+    $wordsArray = @file(SOURCE_PATH, FILE_IGNORE_NEW_LINES) ?: false;
+    if ($wordsArray) {
+        return $wordsArray;
+    } else {
+        header('Location:/views/errors/missing-word.html');
+        exit;
+    }
 }
 
-function getRandomIndex($array){
-    return rand(0,count($array)-1);
-}
-
-function getWord($words,$wordIndex)
+function getWord()
 {
-    return strtolower($words[$wordIndex]);
+    // $wordsArray = getWordsArray();
+    // return strtolower($wordsArray[rand(0,count($wordsArray)-1)]);
+    $cx = getConnectionToDb();
+    $sql = 'SELECT word FROM pendu.words ORDER BY RAND() LIMIT 1';
+    try {
+        $pst = $cx->query($sql);
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    }
+    $word = $pst->fetchColumn();
+    return strtolower($word);
 }
 
 function getReplacementString($wordLength)
@@ -65,3 +77,24 @@ function encode($toEncode){
 function decode($toDecode){
     return json_decode(base64_decode($toDecode),true);
 }
+
+function getConnectionToDb()
+{
+    $dbConfig = parse_ini_file(INI_FILE);
+    $dsn = 'mysql:host=%s;dbname=%s';
+    $dsn = sprintf($dsn, $dbConfig['DB_HOST'], $dbConfig['DB_NAME']);
+    $user = $dbConfig['DB_USER'];
+    $pass = $dbConfig['DB_PASS'];
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+    ];
+    try {
+        $cx = new PDO($dsn, $user, $pass, $options);
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    };
+    return $cx;
+}
+
+;

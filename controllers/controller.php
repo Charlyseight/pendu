@@ -1,6 +1,7 @@
-<?php 
-// Configuration de l'application 
-
+<?php
+// Configuration de l'application
+$wordFound = false;
+session_start();
 if($words = getWordsArray()){
     if($_SERVER['REQUEST_METHOD']==='POST'){
 //    if(isset($_POST['triedLetter']{}
@@ -10,11 +11,12 @@ if($words = getWordsArray()){
     } else if($_SERVER['REQUEST_METHOD']==='GET'){
         include'getController.php';
     }else{
-        die("Tu n'as rien à faire ici avec cette méthode HTTP");
+        header('Location:/views/errors/wrong-method.html');
+        exit;
     }
-} else{
-        die("il n'a pas été possible de récupérer les mots deupuis la base de données");
-  }
+}
+
+
 
 
 

@@ -1,13 +1,10 @@
 <?php
+$_SESSION['trials'] = 0;
+$_SESSION['letters'] = getLettersArray();
+$_SESSION['triedLetters'] = '';
+$_SESSION['word'] = getWord();
+$_SESSION['wordLength'] = strlen($_SESSION['word']);
+$_SESSION['replacementString'] = getReplacementString($_SESSION['wordLength']);
+$_SESSION['remainingTrials'] = MAX_TRIALS;
+$_SESSION['wordFound'] = false;
 
-$wordIndex = getRandomIndex($words);
-$trials = 0;
-$letters= getLettersArray();
-$triedLetters = '';
-$word = getWord($words,$wordIndex);
-$wordLength = strlen($word);
-$replacementString = getReplacementString($wordLength);
-$remainingTrials = MAX_TRIALS;
-$wordFound = false;
-
-setcookie('gameData', encode(compact('wordIndex','trials','triedLetters','letters', 'replacementString')));
